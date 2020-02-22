@@ -11,8 +11,8 @@ if len(sys.argv) != 2:
 datasets = ['20ng', 'R8', 'R52', 'ohsumed', 'mr']
 dataset = sys.argv[1]
 
-if dataset not in datasets:
-	sys.exit("wrong dataset name")
+#if dataset not in datasets:
+#	sys.exit("wrong dataset name")
 
 nltk.download('stopwords')
 stop_words = set(stopwords.words('english'))
@@ -32,16 +32,22 @@ for line in f.readlines():
 f.close()
 
 
+#strip('a'): remove string start n' end char 'a'
+#strip(): remove whitespace
+
 word_freq = {}  # to remove rare words
 
 for doc_content in doc_content_list:
     temp = clean_str(doc_content)
     words = temp.split()
+    print(words, end='')
+    '''
     for word in words:
         if word in word_freq:
             word_freq[word] += 1
         else:
             word_freq[word] = 1
+    print('')
 
 clean_docs = []
 for doc_content in doc_content_list:
@@ -88,3 +94,4 @@ aver_len = 1.0 * aver_len / len(lines)
 print('min_len : ' + str(min_len))
 print('max_len : ' + str(max_len))
 print('average_len : ' + str(aver_len))
+'''
