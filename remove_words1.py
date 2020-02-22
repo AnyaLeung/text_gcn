@@ -20,28 +20,25 @@ nltk.download('stopwords')
 # dataset = '20ng'
 
 doc_content_list = []
-
-f = open(dataset, 'rb')
-for line in f.readlines():
-    doc_content_list.append(line.strip().decode('utf8'))
-f.close()
-
-print(doc_content_list)
-
 word_freq = {}  # to remove rare words
 
+f = open('out.txt', 'rb')
+for text in f.readlines():
+    doc_content_list.append(text.strip().decode('utf8'))
+f.close()
+
 for doc_content in doc_content_list:
-    temp = clean_str(doc_content)
-    print(temp, end='')
-    words = temp.split()
+    words = doc_content.split()
     for word in words:
         if word in word_freq:
             word_freq[word] += 1
         else:
             word_freq[word] = 1
-    print('')
-    '''
 
+print(word_freq)
+'''
+9.22
+#########################################
 clean_docs = []
 for doc_content in doc_content_list:
     temp = clean_str(doc_content)
