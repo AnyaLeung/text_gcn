@@ -8,7 +8,7 @@ import sys
 if len(sys.argv) == 2:
     dataset = sys.argv[1]
 else:
-    dataset = 'test.txt'
+    dataset = 'test'
 
 
 nltk.download('stopwords')
@@ -48,10 +48,9 @@ for doc_content in doc_content_list:
     clean_docs.append(doc_str)
 
 clean_corpus_str = '\n'.join(clean_docs)
-print(clean_corpus_str)
-'''
-f = open('data/corpus/' + dataset + '.clean.txt', 'w')
-#f = open('data/wiki_long_abstracts_en_text.clean.txt', 'w')
+#print(clean_corpus_str)
+
+f = open(dataset+'_clean.txt', 'w')
 f.write(clean_corpus_str)
 f.close()
 
@@ -60,8 +59,7 @@ min_len = 10000
 aver_len = 0
 max_len = 0 
 
-f = open('data/corpus/' + dataset + '.clean.txt', 'r')
-#f = open('data/wiki_long_abstracts_en_text.txt', 'r')
+f = open(dataset+'_clean.txt', 'r')
 lines = f.readlines()
 for line in lines:
     line = line.strip()
@@ -76,4 +74,3 @@ aver_len = 1.0 * aver_len / len(lines)
 print('min_len : ' + str(min_len))
 print('max_len : ' + str(max_len))
 print('average_len : ' + str(aver_len))
-'''
