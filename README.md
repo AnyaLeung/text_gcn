@@ -13,7 +13,9 @@ Tensorflow >= 1.4.0
 
 ## Reproducing Results
 
-1. Run `python remove_words.py 20ng`
+0. Run `python cut.py`
+
+1. Run `python remove_words.py {data}`
 
 2. Run `python build_graph.py 20ng`
 
