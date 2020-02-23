@@ -35,30 +35,21 @@ for doc_content in doc_content_list:
         else:
             word_freq[word] = 1
 
-print(word_freq)
-'''
-9.22
-#########################################
+#print(word_freq)
+
 clean_docs = []
 for doc_content in doc_content_list:
-    temp = clean_str(doc_content)
-    words = temp.split()
+    words = doc_content.split()
     doc_words = []
     for word in words:
-        # word not in stop_words and word_freq[word] >= 5
-        if dataset == 'mr':
+        if word_freq[word] >= 5:
             doc_words.append(word)
-        elif
-        elif word not in stop_words and word_freq[word] >= 5:
-            doc_words.append(word)
-
     doc_str = ' '.join(doc_words).strip()
-    #if doc_str == '':
-        #doc_str = temp
     clean_docs.append(doc_str)
 
 clean_corpus_str = '\n'.join(clean_docs)
-
+print(clean_corpus_str)
+'''
 f = open('data/corpus/' + dataset + '.clean.txt', 'w')
 #f = open('data/wiki_long_abstracts_en_text.clean.txt', 'w')
 f.write(clean_corpus_str)
