@@ -23,12 +23,12 @@ def seg_depart(sentence):
     return outstr
 
 # 给出文档路径
-filename = "test.txt"
+filename = "data/corpus/raw_data.txt"
 outfilename = "out.txt"
 inputs = open(filename, 'r', encoding='UTF-8')
-outputs = open(outfilename, 'w', encoding='UTF-8')
+outputs = open('data/corpus/'+outfilename, 'w', encoding='UTF-8')
 
-# 将输出结果写入ou.txt中
+# 将输出结果写入out.txt中
 for line in inputs:
     line_seg = seg_depart(line)
     outputs.write(line_seg + '\n')

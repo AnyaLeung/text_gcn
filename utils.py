@@ -298,3 +298,15 @@ def clean_str(string):
     string = re.sub(r"\?", " \? ", string)
     string = re.sub(r"\s{2,}", " ", string)
     return string.strip().lower()
+
+def clean_blank_line(file1, file2):
+    file1 = open(file1+'.txt', 'r', encoding='utf-8') 
+    file2 = open(file2+'.txt', 'w', encoding='utf-8') 
+    try:
+        for line in file1.readlines():
+            if line == '\n':
+                line = line.strip("\n")
+            file2.write(line)
+    finally:
+        file1.close()
+        file2.close()

@@ -2,21 +2,11 @@ from nltk.corpus import stopwords
 import nltk
 from nltk.wsd import lesk
 from nltk.corpus import wordnet as wn
-from utils import clean_str, loadWord2Vec
 import sys
+from utils import clean_blank_line
 
-if len(sys.argv) != 2:
-	sys.exit("Use: python remove_words.py <dataset>")
-
-datasets = ['20ng', 'R8', 'R52', 'ohsumed', 'mr']
-dataset = sys.argv[1]
-
-#if dataset not in datasets:
-#	sys.exit("wrong dataset name")
-
+dataset = 'out'
 nltk.download('stopwords')
-stop_words = set(stopwords.words('english'))
-print(stop_words)
 
 # Read Word Vectors
 # word_vector_file = 'data/glove.6B/glove.6B.200d.txt'
@@ -25,61 +15,49 @@ print(stop_words)
 # dataset = '20ng'
 
 doc_content_list = []
-f = open('data/corpus/' + dataset + '.txt', 'rb')
-# f = open('data/wiki_long_abstracts_en_text.txt', 'r')
-for line in f.readlines():
-    doc_content_list.append(line.strip().decode('latin1'))
-f.close()
-
-
-#strip('a'): remove string start n' end char 'a'
-#strip(): remove whitespace
-
 word_freq = {}  # to remove rare words
 
+f = open('data/corpus/'+dataset+'.txt', 'rb')
+for text in f.readlines():
+    doc_content_list.append(text.strip().decode('utf8'))
+f.close()
+
 for doc_content in doc_content_list:
-    temp = clean_str(doc_content)
-    words = temp.split()
-    print(words, end='')
-    '''
+    words = doc_content.split()
     for word in words:
         if word in word_freq:
             word_freq[word] += 1
         else:
             word_freq[word] = 1
-    print('')
+
+print(word_freq)
 
 clean_docs = []
 for doc_content in doc_content_list:
-    temp = clean_str(doc_content)
-    words = temp.split()
+    words = doc_content.split()
     doc_words = []
     for word in words:
-        # word not in stop_words and word_freq[word] >= 5
-        if dataset == 'mr':
+        if word_freq[word] >= 5:
             doc_words.append(word)
-        elif word not in stop_words and word_freq[word] >= 5:
-            doc_words.append(word)
-
     doc_str = ' '.join(doc_words).strip()
-    #if doc_str == '':
-        #doc_str = temp
     clean_docs.append(doc_str)
 
 clean_corpus_str = '\n'.join(clean_docs)
+#print(clean_corpus_str)
 
-f = open('data/corpus/' + dataset + '.clean.txt', 'w')
-#f = open('data/wiki_long_abstracts_en_text.clean.txt', 'w')
+f = open('data/corpus/'+dataset+'_clean.txt', 'w')
 f.write(clean_corpus_str)
 f.close()
 
-#dataset = '20ng'
+clean_blank_line('data/corpus/'+dataset+'_clean', 
+        'data/corpus/'+dataset+'_clean_without_blankline')
+
+
 min_len = 10000
 aver_len = 0
 max_len = 0 
 
-f = open('data/corpus/' + dataset + '.clean.txt', 'r')
-#f = open('data/wiki_long_abstracts_en_text.txt', 'r')
+f = open('data/corpus/'+dataset+'_clean_without_blankline.txt', 'r')
 lines = f.readlines()
 for line in lines:
     line = line.strip()
@@ -94,4 +72,3 @@ aver_len = 1.0 * aver_len / len(lines)
 print('min_len : ' + str(min_len))
 print('max_len : ' + str(max_len))
 print('average_len : ' + str(aver_len))
-'''
