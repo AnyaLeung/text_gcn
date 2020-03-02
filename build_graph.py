@@ -12,15 +12,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 import sys
 from scipy.spatial.distance import cosine
 
-if len(sys.argv) != 2:
-	sys.exit("Use: python build_graph.py <dataset>")
-
-datasets = ['20ng', 'R8', 'R52', 'ohsumed', 'mr']
 # build corpus
-dataset = sys.argv[1]
+dataset = 'out'
 
-if dataset not in datasets:
-	sys.exit("wrong dataset name")
 
 # Read Word Vectors
 # word_vector_file = 'data/glove.6B/glove.6B.300d.txt'
@@ -41,16 +35,18 @@ lines = f.readlines()
 for line in lines:
     doc_name_list.append(line.strip())
     temp = line.split("\t")
-    if temp[1].find('test') != -1:
+    print(temp)
+    if temp[1] == 'test':
         doc_test_list.append(line.strip())
-    elif temp[1].find('train') != -1:
+    elif temp[1] == 'train':
         doc_train_list.append(line.strip())
 f.close()
-# print(doc_train_list)
-# print(doc_test_list)
+#print(doc_train_list)
+#print(doc_test_list)
+
 
 doc_content_list = []
-f = open('data/corpus/' + dataset + '.clean.txt', 'r')
+f = open('data/corpus/' + dataset + '_clean.txt', 'r')
 lines = f.readlines()
 for line in lines:
     doc_content_list.append(line.strip())
@@ -150,62 +146,6 @@ f = open('data/corpus/' + dataset + '_vocab.txt', 'w')
 f.write(vocab_str)
 f.close()
 
-'''
-Word definitions begin
-'''
-'''
-definitions = []
-
-for word in vocab:
-    word = word.strip()
-    synsets = wn.synsets(clean_str(word))
-    word_defs = []
-    for synset in synsets:
-        syn_def = synset.definition()
-        word_defs.append(syn_def)
-    word_des = ' '.join(word_defs)
-    if word_des == '':
-        word_des = '<PAD>'
-    definitions.append(word_des)
-
-string = '\n'.join(definitions)
-
-
-f = open('data/corpus/' + dataset + '_vocab_def.txt', 'w')
-f.write(string)
-f.close()
-
-tfidf_vec = TfidfVectorizer(max_features=1000)
-tfidf_matrix = tfidf_vec.fit_transform(definitions)
-tfidf_matrix_array = tfidf_matrix.toarray()
-print(tfidf_matrix_array[0], len(tfidf_matrix_array[0]))
-
-word_vectors = []
-
-for i in range(len(vocab)):
-    word = vocab[i]
-    vector = tfidf_matrix_array[i]
-    str_vector = []
-    for j in range(len(vector)):
-        str_vector.append(str(vector[j]))
-    temp = ' '.join(str_vector)
-    word_vector = word + ' ' + temp
-    word_vectors.append(word_vector)
-
-string = '\n'.join(word_vectors)
-
-f = open('data/corpus/' + dataset + '_word_vectors.txt', 'w')
-f.write(string)
-f.close()
-
-word_vector_file = 'data/corpus/' + dataset + '_word_vectors.txt'
-_, embd, word_vector_map = loadWord2Vec(word_vector_file)
-word_embeddings_dim = len(embd[0])
-'''
-
-'''
-Word definitions end
-'''
 
 # label list
 label_set = set()
@@ -254,7 +194,6 @@ for i in range(real_train_size):
         # np.random.uniform(-0.25, 0.25)
         data_x.append(doc_vec[j] / doc_len)  # doc_vec[j]/ doc_len
 
-# x = sp.csr_matrix((real_train_size, word_embeddings_dim), dtype=np.float32)
 x = sp.csr_matrix((data_x, (row_x, col_x)), shape=(
     real_train_size, word_embeddings_dim))
 
@@ -268,7 +207,9 @@ for i in range(real_train_size):
     one_hot[label_index] = 1
     y.append(one_hot)
 y = np.array(y)
+print('ok')
 print(y)
+print('ok')
 
 # tx: feature vectors of test docs, no initial features
 test_size = len(test_ids)
@@ -373,7 +314,7 @@ ally = np.array(ally)
 print(x.shape, y.shape, tx.shape, ty.shape, allx.shape, ally.shape)
 
 '''
-Doc word heterogeneous graph
+#Doc word heterogeneous graph
 '''
 
 # word co-occurence with context windows
